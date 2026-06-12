@@ -1,4 +1,4 @@
-# 🚁 UAV Search and Rescue: Reinforcement Learning Implementation
+# UAV Search and Rescue: Reinforcement Learning Implementation
 
 **Team Orienteering Problem with Charging Stations**
 
@@ -19,6 +19,45 @@ This project solves the **Team Orienteering Problem (TOP)** with charging statio
 - ⚡ **Charging stations** - Strategic recharging locations
 - 👥 **Multiple UAVs** - Team coordination
 - 🎯 **Selective coverage** - Cannot visit all nodes
+
+flowchart TD
+    A[UAV Search and Rescue] --> B[Team Orienteering Problem]
+    B --> C[Charging Stations]
+    B --> D[Multiple UAVs]
+    B --> E[Time Constraints]
+    B --> F[Battery Constraints]
+    B --> G[Selective Coverage]
+
+    C --> H[Strategic Recharging Locations]
+    D --> I[Team Coordination]
+    E --> J[Limited Mission Duration]
+    F --> K[Limited Flight Time per Charge]
+
+    A --> L[Objective: Maximize Total Rewards]
+    A --> M[Constraints]
+    M --> N[Max Flight Time per UAV]
+    M --> O[Limited Battery Capacity]
+    M --> P[Service Nodes Visited Once]
+    M --> Q[Charging Stations Visited Multiple Times]
+    M --> R[Return to Depot]
+
+    A --> S[Decision Variables]
+    S --> T[Nodes to Visit]
+    S --> U[Order of Visits]
+    S --> V[When to Recharge]
+
+    A --> W[NP-hard Problem]
+    A --> X[Core Implementation]
+    X --> Y[Multiple RL Algorithms]
+    Y --> Z[Q-Learning with NDTS]
+    Y --> AA[Improved Q-Learning]
+    Y --> AB[Deep Q-Network]
+    Y --> AC[Greedy Baseline Heuristic]
+
+    X --> AD[Two-Phase Decomposition]
+    AD --> AE[K-means Clustering]
+    AD --> AF[Independent Optimization]
+    AD --> AG[Scalable to 100+ Nodes]
 
 ### Problem Formulation
 

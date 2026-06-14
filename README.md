@@ -10,15 +10,14 @@ Implementation of reinforcement learning approaches for routing multiple UAVs in
 
 ---
 
-## 🎯 Overview
-
+##  Overview
 This project solves the **Team Orienteering Problem (TOP)** with charging stations for UAV search and rescue missions. Multiple UAVs must visit survivor locations to maximize total rescued rewards while managing:
 
-- ⏱️ **Time constraints** - Limited mission duration
-- 🔋 **Battery constraints** - Limited flight time per charge
-- ⚡ **Charging stations** - Strategic recharging locations
-- 👥 **Multiple UAVs** - Team coordination
-- 🎯 **Selective coverage** - Cannot visit all nodes
+-  **Time constraints** - Limited mission duration
+-  **Battery constraints** - Limited flight time per charge
+-  **Charging stations** - Strategic recharging locations
+-  **Multiple UAVs** - Team coordination
+-  **Selective coverage** - Cannot visit all nodes
 
 flowchart TD
     A[UAV Search and Rescue] --> B[Team Orienteering Problem]

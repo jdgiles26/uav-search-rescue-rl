@@ -178,6 +178,18 @@ Then in the browser:
 2. Click **🚀 Solve** to find optimal routes
 3. Explore the 4 analysis tabs
 
+### Step 6: Deploy Frontend to Vercel
+
+This repository now includes `vercel.json` to build the Vite app from `frontend/`.
+
+1. Import the repository in Vercel.
+2. Set the following environment variables in the Vercel project:
+   - `VITE_API_BASE_URL` = your backend base URL (example: `https://api.example.com`)
+   - `VITE_WS_URL` = your backend websocket URL (example: `wss://api.example.com/ws`)
+3. Deploy.
+
+If your backend is hosted separately, set backend `ALLOWED_ORIGINS` to include your Vercel domain (comma-separated list for multiple origins).
+
 ---
 
 ## 📚 Usage

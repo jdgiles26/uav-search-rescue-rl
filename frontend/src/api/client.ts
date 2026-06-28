@@ -5,7 +5,15 @@
 
 import type { Mission, Alert, EnvironmentConfig, Solution } from "../types";
 
-const BASE = "";
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || window.location.origin).replace(
+  /\/+$/,
+  ""
+);
+const WS_URL = import.meta.env.VITE_WS_URL;
+
+function apiUrl(path: string): string {
+  return `${API_BASE}${path}`;
+}
 
 async function json<T>(res: Response): Promise<T> {
   if (!res.ok) {
@@ -24,11 +32,11 @@ export async function listMissions(
   const params = new URLSearchParams();
   if (status) params.set("status", status);
   if (source) params.set("source", source);
-  return json(await fetch(`${BASE}/api/missions?${params}`));
+  return json(await fetch(apiUrl(`/api/missions?${params}`)));
 }
 
 export async function getMission(id: number): Promise<Mission> {
-  return json(await fetch(`${BASE}/api/missions/${id}`));
+  return json(await fetch(apiUrl(`/api/missions/${id}`)));
 }
 
 export async function createMission(body: {
@@ -38,7 +46,7 @@ export async function createMission(body: {
   source?: string;
 }): Promise<Mission> {
   return json(
-    await fetch(`${BASE}/api/missions`, {
+    await fetch(apiUrl("/api/missions"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -47,7 +55,7 @@ export async function createMission(body: {
 }
 
 export async function deleteMission(id: number): Promise<void> {
-  await fetch(`${BASE}/api/missions/${id}`, { method: "DELETE" });
+  await fetch(apiUrl(`/api/missions/${id}`), { method: "DELETE" });
 }
 
 export async function reviewMission(
@@ -57,7 +65,7 @@ export async function reviewMission(
   notes = ""
 ): Promise<Mission> {
   return json(
-    await fetch(`${BASE}/api/missions/${id}/review`, {
+    await fetch(apiUrl(`/api/missions/${id}/review`), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action, reviewed_by: reviewedBy, notes }),
@@ -74,7 +82,7 @@ export async function solveMission(body: {
   n_episodes: number;
 }): Promise<Solution & { mission_id: number }> {
   return json(
-    await fetch(`${BASE}/api/solve`, {
+    await fetch(apiUrl("/api/solve"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -86,7 +94,7 @@ export async function solveMission(body: {
 
 export async function generateEnvironment(config: EnvironmentConfig) {
   return json(
-    await fetch(`${BASE}/api/environments`, {
+    await fetch(apiUrl("/api/environments"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(config),
@@ -97,7 +105,7 @@ export async function generateEnvironment(config: EnvironmentConfig) {
 export async function listTheaters(): Promise<
   Record<string, { lat: number; lon: number }>
 > {
-  return json(await fetch(`${BASE}/api/environments/theaters`));
+  return json(await fetch(apiUrl("/api/environments/theaters")));
 }
 
 // ---- Ingestion ----
@@ -116,7 +124,7 @@ export async function ingestDocument(
   const fd = new FormData();
   fd.append("file", file);
   return json(
-    await fetch(`${BASE}/api/ingest?auto_solve=${autoSolve}`, {
+    await fetch(apiUrl(`/api/ingest?auto_solve=${autoSolve}`), {
       method: "POST",
       body: fd,
     })
@@ -128,11 +136,11 @@ export async function ingestDocument(
 export async function listAlerts(status?: string): Promise<Alert[]> {
   const params = new URLSearchParams();
   if (status) params.set("status", status);
-  return json(await fetch(`${BASE}/api/alerts?${params}`));
+  return json(await fetch(apiUrl(`/api/alerts?${params}`)));
 }
 
 export async function dismissAlert(id: number): Promise<void> {
-  await fetch(`${BASE}/api/alerts/${id}/dismiss`, { method: "POST" });
+  await fetch(apiUrl(`/api/alerts/${id}/dismiss`), { method: "POST" });
 }
 
 // ---- WebSocket ----
@@ -140,8 +148,9 @@ export async function dismissAlert(id: number): Promise<void> {
 export function connectWS(
   onEvent: (event: string, payload: Record<string, unknown>) => void
 ): WebSocket {
-  const proto = window.location.protocol === "https:" ? "wss" : "ws";
-  const ws = new WebSocket(`${proto}://${window.location.host}/ws`);
+  const fallbackProto = window.location.protocol === "https:" ? "wss" : "ws";
+  const fallbackWsUrl = `${fallbackProto}://${window.location.host}/ws`;
+  const ws = new WebSocket(WS_URL || fallbackWsUrl);
   ws.onmessage = (e) => {
     try {
       const data = JSON.parse(e.data);

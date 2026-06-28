@@ -29,10 +29,14 @@ export default function AlertQueue() {
         </div>
       ) : (
         <div className="space-y-3">
-          {alerts.map((alert) => (
-            <div key={alert.id} className="glass-card-hover">
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
+          {alerts.map((alert) => {
+            const locationName = alert.extracted.location_name;
+            const survivorsEstimate = alert.extracted.survivors_estimate;
+            const urgency = alert.extracted.urgency;
+            return (
+              <div key={alert.id} className="glass-card-hover">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
                   <div className="flex items-center gap-3">
                     <h3 className="font-medium text-gray-200">
                       {alert.document_name}
@@ -57,19 +61,20 @@ export default function AlertQueue() {
 
                   {/* Extracted highlights */}
                   <div className="flex flex-wrap gap-2 text-xs">
-                    {alert.extracted.location_name && (
+                    {locationName != null && String(locationName) !== "" && (
                       <span className="rounded bg-white/5 px-2 py-0.5 text-gray-300">
-                        {String(alert.extracted.location_name)}
+                        {String(locationName)}
                       </span>
                     )}
-                    {alert.extracted.survivors_estimate && (
+                    {survivorsEstimate != null &&
+                      String(survivorsEstimate) !== "" && (
                       <span className="rounded bg-red-500/10 px-2 py-0.5 text-red-300">
-                        {String(alert.extracted.survivors_estimate)} survivors
+                        {String(survivorsEstimate)} survivors
                       </span>
                     )}
-                    {alert.extracted.urgency && (
+                    {urgency != null && String(urgency) !== "" && (
                       <span className="rounded bg-yellow-500/10 px-2 py-0.5 text-yellow-300">
-                        {String(alert.extracted.urgency)}
+                        {String(urgency)}
                       </span>
                     )}
                   </div>
@@ -80,29 +85,30 @@ export default function AlertQueue() {
                       ? new Date(alert.created_at).toLocaleString()
                       : "unknown"}
                   </p>
-                </div>
+                  </div>
 
-                <div className="flex gap-2">
-                  {alert.mission_id && (
-                    <Link
-                      to="/review"
-                      className="rounded-lg border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-400"
-                    >
-                      Mission #{alert.mission_id}
-                    </Link>
-                  )}
-                  {alert.status !== "dismissed" && (
-                    <button
-                      className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs text-red-400"
-                      onClick={() => handleDismiss(alert.id)}
-                    >
-                      Dismiss
-                    </button>
-                  )}
+                  <div className="flex gap-2">
+                    {alert.mission_id && (
+                      <Link
+                        to="/review"
+                        className="rounded-lg border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-400"
+                      >
+                        Mission #{alert.mission_id}
+                      </Link>
+                    )}
+                    {alert.status !== "dismissed" && (
+                      <button
+                        className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1 text-xs text-red-400"
+                        onClick={() => handleDismiss(alert.id)}
+                      >
+                        Dismiss
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

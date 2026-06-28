@@ -26,16 +26,16 @@ export default function BatteryChart({ solution }: { solution: Solution }) {
     <Plot
       data={traces}
       layout={{
-        title: "Route Length Comparison",
+        title: { text: "Route Length Comparison" },
         height: 380,
         ...DARK_LAYOUT,
         xaxis: {
           ...DARK_LAYOUT.xaxis,
-          title: "Step",
+          title: { text: "Step" },
         },
         yaxis: {
           ...DARK_LAYOUT.yaxis,
-          title: "Battery Level",
+          title: { text: "Battery Level" },
         },
       }}
       config={{ displayModeBar: false, responsive: true }}

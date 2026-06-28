@@ -33,6 +33,12 @@ export default function AlertQueue() {
             <div key={alert.id} className="glass-card-hover">
               <div className="flex items-start justify-between">
                 <div className="space-y-1">
+                  {(() => {
+                    const locationName = alert.extracted.location_name;
+                    const survivorsEstimate = alert.extracted.survivors_estimate;
+                    const urgency = alert.extracted.urgency;
+                    return (
+                      <>
                   <div className="flex items-center gap-3">
                     <h3 className="font-medium text-gray-200">
                       {alert.document_name}
@@ -57,19 +63,20 @@ export default function AlertQueue() {
 
                   {/* Extracted highlights */}
                   <div className="flex flex-wrap gap-2 text-xs">
-                    {alert.extracted.location_name && (
+                    {locationName != null && String(locationName) !== "" && (
                       <span className="rounded bg-white/5 px-2 py-0.5 text-gray-300">
-                        {String(alert.extracted.location_name)}
+                        {String(locationName)}
                       </span>
                     )}
-                    {alert.extracted.survivors_estimate && (
+                    {survivorsEstimate != null &&
+                      String(survivorsEstimate) !== "" && (
                       <span className="rounded bg-red-500/10 px-2 py-0.5 text-red-300">
-                        {String(alert.extracted.survivors_estimate)} survivors
+                        {String(survivorsEstimate)} survivors
                       </span>
                     )}
-                    {alert.extracted.urgency && (
+                    {urgency != null && String(urgency) !== "" && (
                       <span className="rounded bg-yellow-500/10 px-2 py-0.5 text-yellow-300">
-                        {String(alert.extracted.urgency)}
+                        {String(urgency)}
                       </span>
                     )}
                   </div>
@@ -80,6 +87,9 @@ export default function AlertQueue() {
                       ? new Date(alert.created_at).toLocaleString()
                       : "unknown"}
                   </p>
+                      </>
+                    );
+                  })()}
                 </div>
 
                 <div className="flex gap-2">

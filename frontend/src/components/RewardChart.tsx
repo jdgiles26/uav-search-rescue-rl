@@ -31,7 +31,7 @@ export default function RewardChart({ solution }: { solution: Solution }) {
         },
       ]}
       layout={{
-        title: "Reward per UAV",
+        title: { text: "Reward per UAV" },
         height: 380,
         ...DARK_LAYOUT,
       }}
